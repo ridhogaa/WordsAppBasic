@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.appcompat.app.AppCompatActivity
+import androidx.navigation.findNavController
 import androidx.recyclerview.widget.RecyclerView
 import com.ergea.wordsapp.R
 import com.ergea.wordsapp.databinding.ItemListWordBinding
@@ -23,27 +24,9 @@ class WordAdapter(private val list: List<Char>) :
             binding.btnWord.text = list.toString()
 
             binding.btnWord.setOnClickListener {
-                val appCompatActivity = it.context as AppCompatActivity
-                val mFragmentManager = appCompatActivity.supportFragmentManager
-                val mDetailLetterFragment = WordDetailFragment()
-                val fragment =
-                    mFragmentManager.findFragmentByTag(WordDetailFragment::class.java.simpleName)
-
-                if (fragment !is WordDetailFragment) {
-                    val bundle = Bundle()
-                    bundle.putString("EXTRA_WORD", list.toString())
-                    mDetailLetterFragment.arguments = bundle
-
-                    mFragmentManager
-                        .beginTransaction()
-                        .replace(
-                            R.id.frameContainer,
-                            mDetailLetterFragment,
-                            WordDetailFragment::class.java.simpleName
-                        )
-                        .addToBackStack(null)
-                        .commit()
-                }
+                val bundle = Bundle()
+                bundle.putString("EXTRA_WORD", list.toString())
+                it.findNavController().navigate(R.id.action_wordHomeFragment_to_wordDetailFragment, bundle)
             }
         }
     }
